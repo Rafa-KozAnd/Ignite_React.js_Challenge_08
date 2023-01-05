@@ -1,19 +1,27 @@
-import { Icon } from './Icon';
+import { Icon } from "./Icon";
 
-import '../styles/button.scss';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, memo } from "react";
+import "../styles/button.scss";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
-  iconName: 'action' | 'comedy' | 'documentary' | 'drama' | 'horror' | 'family';
+  iconName: "action" | "comedy" | "documentary" | "drama" | "horror" | "family";
   selected: boolean;
 }
 
-export function Button({ iconName, title, selected, ...rest }: ButtonProps) {
+function ButtonComponent({ iconName, title, selected, ...props }: ButtonProps) {
   return (
-    <button type="button" {...(selected && { className: 'selected' })} {...rest}>
-      <Icon name={iconName} color={selected ? '#FAE800' : '#FBFBFB'} />
+    <button
+      type="button"
+      className={selected ? "selected" : undefined}
+      {...props}
+    >
+      <Icon name={iconName} color={selected ? "#FAE800" : "#FBFBFB"} />
       {title}
     </button>
   );
 }
+
+export const Button = memo(ButtonComponent, (prevProps, nextProps) => {
+  return prevProps.selected === nextProps.selected;
+});
